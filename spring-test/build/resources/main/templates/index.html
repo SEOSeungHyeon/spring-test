@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Test Index</title>
+</head>
+<script src="http://code.jquery.com/jquery-3.5.1.min.js"></script>
+<body>
+
+    <form id="wForm" name="wForm" enctype="multipart/form-data">
+        <input type="hidden" name="param1" value=""/>
+        <input type="hidden" name="param2" value=""/>
+        <input type="hidden" name="param3" value=""/>
+        <input type="hidden" name="nextParam1" value=""/>
+    </form>
+
+
+<!--    <form id="sForm" name="wForm" enctype="application/json">-->
+<!--        <input type="hidden" name="nextParam1" id="nextParam1" value="">-->
+<!--    </form>-->
+    Hello!
+
+    <button id="testbutton" onclick="fn1()">버튼</button>
+
+    <input type="text" id="text1" name="text1" value="">
+    <input type="text" id="text2" name="text2" value="">
+    <input type="text" id="text3" name="text3" value="">
+
+
+    <br>
+    <br>
+    <br>
+    <br>
+
+    <input type="file" id="file1" name="file1">
+
+<!--    <button id="sendFile" name="sendFile" onclick="sendFile()">파일전송</button>-->
+    <button id="sendFile" name="sendFile" onclick="example()">파일전송</button>
+</body>
+<script>
+    jQuery.fn.serializeObject = function() {
+        var obj = null;
+        try {
+            if ( this[0].tagName && this[0].tagName.toUpperCase() == "FORM" ) {
+                var arr = this.serializeArray();
+                if ( arr ) {
+                    obj = {};
+                    jQuery.each(arr, function() {
+                        obj[this.name] = this.value;
+                    });
+                }//if ( arr ) {
+            }
+        }
+        catch(e) {alert(e.message);}
+        finally  {}
+
+        return obj;
+    };
+
+    function fn1() {
+        document.wForm.param1.value = document.getElementById('text1').value;
+        document.wForm.param2.value = document.getElementById('text2').value;
+        document.wForm.param3.value = document.getElementById('text3').value;
+
+        var form = $('#wForm');
+        var formData = form.serializeObject();
+        // var form = $('#wForm')[0];
+        // var formData = new FormData(form);
+
+        $.ajax({
+            type: "POST",
+            url: '/fn1?param1=' + document.wForm.param1.value,
+            data: JSON.stringify(formData),
+            contentType: 'application/json',
+            // data: formData,
+            // contentType: false,
+            processData: false,
+            success: function(data) {
+                moveNextPage();
+            },
+            error: function() {
+                alert('에러가 발생했습니다.');
+            }
+        });
+    }
+
+    function moveNextPage() {
+        var obj = document.wForm;
+        obj.method = "post";
+        obj.target = "";
+        obj.action = "/nextPage";
+        obj.submit();
+    }
+
+    function sendFile() {
+        const file = $("#file1")[0];
+        // 파일을 여러개 선택할 수 있으므로 files 라는 객체에 담긴다.
+
+
+        $.ajax({
+            type:"POST",
+            url: "/fileUpload",
+            // enctype: 'multipart/form-data',
+            // contentType: false,
+            contentType: 'application/json',
+            processData: false,
+            data: JSON.stringify(formData),
+            success: function(data){
+                alert('성공');
+            },
+            err: function(err){
+                alert('실패');
+            }
+        })
+    }
+
+    function example() {
+        document.wForm.param1.value = document.getElementById('text1').value;
+        document.wForm.param2.value = document.getElementById('text2').value;
+        document.wForm.param3.value = document.getElementById('text3').value;
+
+        var data = {
+            param1: document.wForm.param1.value,
+            param2: document.wForm.param2.value,
+            param3: document.wForm.param3.value,
+            nextParam1: 1234
+        }
+        let fileImg = $('#file1')[0].files[0];
+
+        // let form = new FormData();
+        // form.append("multipartFile", fileImg);
+        // form.append("param", new Blob([JSON.stringify(data)], {type: "application/json"}));
+
+        $.ajax({
+            type: "POST",
+            url: "/fileUpload",
+            // data: form,
+            // contentType: false,
+            data: data,
+            contentType: 'application/json',
+            processData: false,
+
+            success: function (response) {
+                alert("SUCCESS!");
+            }
+        });
+    }
+</script>
+</html>
