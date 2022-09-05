@@ -21,6 +21,7 @@ repositories {
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
     implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-batch'
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
     annotationProcessor 'org.projectlombok:lombok'
@@ -28,6 +29,9 @@ dependencies {
 
     /* lucy-xss-servlet-filter */
     implementation group: 'com.navercorp.lucy', name: 'lucy-xss-servlet', version: '2.0.1'
+
+    /* Database */
+    implementation 'com.h2database:h2'
 
 
 //    implementation 'org.apache.commons:commons-lang3:3.12.0'

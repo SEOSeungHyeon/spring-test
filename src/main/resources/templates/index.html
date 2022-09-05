@@ -36,6 +36,10 @@
 
 <!--    <button id="sendFile" name="sendFile" onclick="sendFile()">파일전송</button>-->
     <button id="sendFile" name="sendFile" onclick="example()">파일전송</button>
+
+
+    <br>
+    <button id="jdbcTest" name="jdbcTest" onclick="jdbcTest()">JDBC 테스트</button>
 </body>
 <script>
     jQuery.fn.serializeObject = function() {
@@ -143,6 +147,19 @@
             success: function (response) {
                 alert("SUCCESS!");
             }
+        });
+    }
+
+    function jdbcTest() {
+        $.ajax({
+            type: "GET",
+            url: "/jdbc-test",
+            data: null,
+            contentType: 'application/json',
+            processData: false,
+            success: function (response) {
+                alert("완료");
+            },
         });
     }
 </script>
